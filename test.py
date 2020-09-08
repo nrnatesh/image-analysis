@@ -12,9 +12,9 @@ from java.lang import Double
 from java.io import File
 import os
 
-imgdir = "/Users/nrnatesh/shenlab/Droplet-organoid/image-scripts/input_images"
+imgdir = "/home/nrnatesh/shenlab/Droplet-organoid/image-analysis/input_images"
 img_path = os.path.join(imgdir,"T2.tif")
-imp = IJ.openImage("/Users/nrnatesh/shenlab/Droplet-organoid/image-scripts/input_images/T2.tif")
+imp = IJ.openImage(img_path)
 IJ.run(imp, "8-bit", "")
 IJ.run(imp, "Smooth", "")
 IJ.run(imp, "Find Edges", "")
@@ -22,7 +22,8 @@ IJ.run(imp, "Enhance Contrast...", "saturated=0.3 equalize")
 IJ.run(imp, "Auto Threshold", "method=Default white")
 IJ.run(imp, "Despeckle", "")
 IJ.run(imp, "Remove Outliers...", "radius=2 threshold=50 which=Bright")
-#IJ.run("Hough Circle Transform","minRadius=50, maxRadius=65, inc=5, minCircles=1, maxCircles=100, threshold=0.4, resolution=392, ratio=2.0, bandwidth=10, local_radius=10,  reduce show_mask results_table")
+
+IJ.run(imp,"Hough Circle Transform","minRadius=50, maxRadius=65, inc=5, minCircles=1, maxCircles=100, threshold=0.4, resolution=392, ratio=2.0, bandwidth=10, local_radius=10,  reduce show_mask results_table")
 IJ.run(imp, "Convert to Mask", "")
 
 
