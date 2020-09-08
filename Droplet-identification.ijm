@@ -1,0 +1,22 @@
+open("/media/nrnatesh/NN78/shenlab/Droplet-organoid/image-scripts/input_images/T2.tif");
+run("8-bit");
+run("Duplicate...", " ");
+run("Smooth");
+run("Find Edges");
+run("Enhance Contrast...", "saturated=0.3 equalize");
+run("Auto Threshold", "method=Default white");
+run("Despeckle");
+run("Remove Outliers...", "radius=2 threshold=50 which=Bright");
+selectWindow("T2-1.tif");
+run("Hough Circle Transform","minRadius=50, maxRadius=65, inc=5, minCircles=1, maxCircles=100, threshold=0.4, resolution=413, ratio=2.0, bandwidth=10, local_radius=10,  reduce show_mask results_table");
+wait(10000)
+selectWindow("Centroid overlay");
+setOption("BlackBackground", true);
+run("Convert to Mask");
+run("Create Selection");
+roiManager("Add");
+roiManager("Select", 0);
+selectWindow("T2.tif");
+roiManager("Select", 0);
+run("Add Selection...");
+roiManager("Split");
