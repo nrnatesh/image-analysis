@@ -22,7 +22,12 @@ plt.imshow(img, cmap='gray')
 #plt.rcParams["figure.figsize"]= (16,9)
 #plt.imshow(img, cmap='gray')
 
-all_circs = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 0.8, 120, param1= 30, param2 = 25, minRadius = 50, maxRadius = 65)
+all_circs = cv2.HoughCircles(img, 
+                             cv2.HOUGH_GRADIENT, 
+                             dp = 1, 
+                             minDist = 100, 
+                             param1= 30, param2 = 25,
+                             minRadius = 50, maxRadius = 65)
 all_circs_rounded = np.uint16(np.around(all_circs))
 
 print(all_circs_rounded)
@@ -38,5 +43,6 @@ for i in all_circs_rounded[0, :]:
     
 plt.rcParams["figure.figsize"] = (16,9)
 plt.imshow(img_orig)
+
 
         

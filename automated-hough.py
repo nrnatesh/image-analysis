@@ -15,6 +15,7 @@ from functools import wraps
 import errno
 import os
 import copy
+import sys
 
 # construct the argument parser and parse the arguments
 #ap = argparse.ArgumentParser()
@@ -23,11 +24,12 @@ import copy
 
 # load the image, clone it for output, and then convert it to grayscale
 #image = cv2.imread(args["image"])
-image_name = os.path.join("/home/nrnatesh/shenlab/Droplet-organoid/image-scripts/input_images", "T2.tif")
-image = cv2.imread(image_name,0)
-orig_image = np.copy(image)
+image_name = "/home/nrnatesh/shenlab/Droplet-organoid/image-analysis/input_images/T2.tif"
+image = cv2.imread(image_name, 1)
+orig_image = image.copy()
 output = image.copy()
-gray = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
 
 cv2.imshow("gray", gray)
 cv2.waitKey(0)
@@ -43,7 +45,7 @@ number_of_circles_expected = 60      #we expect to find just one circle
 breakout = False
 
 #hand tune this
-max_guess_accumulator_array_threshold = 100     #minimum of 1, no maximum, (max 300?) the quantity of votes 
+max_guess_accumulator_array_threshold = 50     #minimum of 1, no maximum, (max 300?) the quantity of votes 
                                                 #needed to qualify for a circle to be found.
 circleLog = []
 
@@ -53,7 +55,7 @@ while guess_accumulator_array_threshold > 1 and breakout == False:
     #start out with smallest resolution possible, to find the most precise circle, then creep bigger if none found
     guess_dp = 1.0
     print("resetting guess_dp:" + str(guess_dp))
-    while guess_dp < 9 and breakout == False:
+    while guess_dp < 3 and breakout == False:
         guess_radius = maximum_circle_size
         print("setting guess_radius: " + str(guess_radius))
         print(circles is None)
@@ -72,7 +74,7 @@ while guess_accumulator_array_threshold > 1 and breakout == False:
                 cv2.HOUGH_GRADIENT, 
                 dp=guess_dp,               #resolution of accumulator array.
                 minDist=100,                #number of pixels center of circles should be from each other, hardcode
-                param1=50,
+                param1=30,
                 param2=guess_accumulator_array_threshold,
                 minRadius=(guess_radius-3),    #HoughCircles will look for circles at minimum this size
                 maxRadius=(guess_radius+3)     #HoughCircles will look for circles at maximum this size
@@ -89,7 +91,7 @@ while guess_accumulator_array_threshold > 1 and breakout == False:
             if guess_radius < 40:
                 break;
 
-        guess_dp += 1.5
+        guess_dp += .5
 
     guess_accumulator_array_threshold -= 2
 
@@ -102,7 +104,7 @@ for cir in circleLog:
 
     if (len(cir) > 1):
         print("FAIL before")
-        exit()
+        sys.exit()
 
     print(cir[0, :])
 
@@ -111,7 +113,7 @@ for cir in circleLog:
     # loop over the (x, y) coordinates and radius of the circles
     if (len(cir) > 1):
         print("FAIL after")
-        exit()
+        sys.exit()
 
     for (x, y, r) in cir:
         # draw the circle in the output image, then draw a rectangle
