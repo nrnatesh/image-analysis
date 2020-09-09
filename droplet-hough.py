@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+from plantcv import plantcv as pcv
 
 image_name = "/home/nrnatesh/shenlab/Droplet-organoid/image-analysis/input_images/T2.tif"
 img = cv2.imread(image_name, 1)
@@ -43,6 +44,15 @@ for i in all_circs_rounded[0, :]:
     
 plt.rcParams["figure.figsize"] = (16,9)
 plt.imshow(img_orig)
+plt.show()
+
+coord = []
+for i in all_circs_rounded[0, :]:
+    coord.append((i[0],i[1],i[2]))
+
+mask = np.zeros(img.shape, dtype = np.uint8)
+test = cv2.circle(img, (coord[0][0],coord[0][1]), coord[0][2], (255,255,255), 0.1)
+cv2.imshow("test", test)
 
 
-        
+
