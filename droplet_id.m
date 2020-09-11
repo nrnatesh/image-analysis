@@ -1,6 +1,8 @@
 format longG
 droplets = imread('/home/nrnatesh/shenlab/Droplet-organoid/image-analysis/input_images/T2.tif');
 
+commandStr = 'python /home/nrnatesh/shenlab/Droplet-organoid/image-analysis/droplet-hough.py';
+ [status, commandOut] = system(commandStr);
 %%
 % imshow(rgb);
 %[centers,radii] = imfindcircles(rgb,[45 60],'Sensitivity',1, 'EdgeThreshold',.7)
